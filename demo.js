@@ -1,99 +1,40 @@
-import {Component} from "react";
+import {Component, useState} from "react";
 
-export default class Demo extends Component {
-    constructor() {
-        super();
-        this.state = {
-            list: [
-                {name: 'Ngọc', age: 28},
-                {name: 'Lộc', age: 28},
-                {name: 'Linh', age: 21}
-            ],
-            inName: '',
-            inAge: '',
-            ind: '',
-            name: '',
-            isShow: false
+
+export default function FComponent(){
+    let [list,setList] = useState([
+        {
+            name: "loc",
+            age:28
+        },
+        {
+            name: "ngoc",
+            age:28
         }
-    }
+    ])
+    let [name,setName] = useState('')
+    let [age,setAge] = useState('')
+    return(
+        <>
+            {list.map(item=>(
+                <h1>{item.name}-{item.age}</h1>
+            ))}
 
-    add = () => {
-        this.setState((state) => {
-            return {
-                list: [...state.list, {name: this.state.inName, age: this.state.inAge}],
-                inName: '',
-                inAge: ''
-            }
-        })
-    }
-    change = (e) => {
-        this.setState({[e.target.name]: e.target.value})
-    }
-    showValueEdit = (e) => {
-        let a = e.target.value
-        this.state.list.map((item, ind) => {
-            if (ind === +a) {
-                this.setState({inName: item.name})
-                this.setState({inAge: item.age})
-                this.setState({ind: a})
-            }
-        })
-        this.setState(state => {
-            return {
-                isShow: true
-            }
-        })
-    }
-    edit = () => {
-        this.setState((state) => {
-            state.list.map((item, ind) => {
-                if (ind === +state.ind) {
-                    item.name = state.inName
-                    item.age = state.inAge
-                }
-            })
-            return {
-                state,
-                inName: '',
-                inAge: '',
-                isShow: false
-            }
-        })
-    }
 
-    render() {
-        return (
-            <>
-                {this.state.list.map((item, ind) => (
-                    <>
-                        <h1 key={ind}>name: {item.name} - age: {item.age}</h1>
-                        <button value={ind} key={ind} onClick={(e) => {
-                            this.showValueEdit(e)
-                        }}>Edit
-                        </button>
-                        {!this.state.isShow && <>
-                            <button key={ind} onClick={(e) => {
-                                this.setState(state => {
-                                    let oldList = [...state.list];
-                                    oldList.splice(ind, 1);
-                                    return {
-                                        list: oldList
-                                    }
-                                })
-                            }}>Delete
-                            </button>
-                        </>}
-                        <br/>
-                    </>
-                ))}
-                <br/>
-                <input type="text" name={"inName"} value={this.state.inName} onChange={this.change}/>
-                <input type="text" name={"inAge"} value={this.state.inAge} onChange={this.change}/>
-                {!this.state.isShow && <button onClick={this.add}>SAVE</button>}
-                {this.state.isShow && <button onClick={this.edit}>Edit</button>}
-                <br/>
-            </>
-        )
-    }
+            <input type="text" value={name} onChange={event => {
+             setName(event.target.value)
+            }}/>
+            <input type="text" value={age} onChange={event => {
+             setAge(event.target.value)
+            }}/>
+
+
+            <button onClick={()=>{
+                setList([...list,{name:name,age:age}])
+                setName('')
+                setAge('')
+            }}>save</button>
+
+        </>
+    )
 }
-
